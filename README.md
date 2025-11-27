@@ -1,281 +1,376 @@
 Join the Skool - https://www.skool.com/iss-ai-automation-school-6342/about
 
-# Claude Code Agent Orchestration System v2 🚀
+# Claude Code SaaS App Generator v3
 
-A simple yet powerful orchestration system for Claude Code that uses specialized agents to manage complex projects from start to finish, with mandatory human oversight and visual testing.
+**From Idea to Production SaaS with Payments in One Automated Workflow**
 
-## 🎯 What Is This?
+Transform any Google AI Studio project OR your requirements into a complete, production-ready SaaS application with authentication, AI features, **Stripe payments & subscriptions**, real-time database, 70+ SEO landing pages, and deployment - all automated with Claude Code agents.
 
-This is a **custom Claude Code orchestration system** that transforms how you build software projects. Claude Code itself acts as the orchestrator with its 200k context window, managing the big picture while delegating individual tasks to specialized subagents:
+## What's New in v3
 
-- **🧠 Claude (You)** - The orchestrator with 200k context managing todos and the big picture
-- **✍️ Coder Subagent** - Implements one todo at a time in its own clean context
-- **👁️ Tester Subagent** - Verifies implementations using Playwright in its own context
-- **🆘 Stuck Subagent** - Human escalation point when ANY problem occurs
+- **Stripe Integration** - Automatic payment setup via CLI (products, prices, webhooks)
+- **Planner Agent (Opus)** - Architecture decisions before building complex features
+- **Context Management** - Optimized to use less of your 5h/weekly limits
+- **No Fallbacks Rule** - Every agent escalates problems instead of guessing
+- **Pricing & Billing Pages** - Complete subscription management UI
+- **70+ Landing Pages** - Including pricing-focused SEO pages
 
-## ⚡ Key Features
+## What Does This Do?
 
-- **No Fallbacks**: When ANY agent hits a problem, you get asked - no assumptions, no workarounds
-- **Visual Testing**: Playwright MCP integration for screenshot-based verification
-- **Todo Tracking**: Always see exactly where your project stands
-- **Simple Flow**: Claude creates todos → delegates to coder → tester verifies → repeat
-- **Human Control**: The stuck agent ensures you're always in the loop
+**Give it:**
+- An **AI Studio project folder** (exported from Google AI Studio)
+- OR a **description of what you want to build**
+- Your **API keys** (Jina, AI provider, Clerk, **Stripe**)
 
-## 🚀 Quick Start
+**Get:**
+- Complete **Next.js SaaS application**
+- **Clerk authentication** (sign-up, sign-in, protected routes)
+- **Convex serverless backend** (real-time database)
+- **Stripe payments** (checkout, subscriptions, billing portal)
+- **AI features** using verified model names from real docs
+- **70+ SEO landing pages** (features, use cases, pricing, comparisons)
+- **User dashboard** with usage tracking and billing
+- Ready to **deploy** to Vercel
 
-### Prerequisites
+## The Agent System
 
-1. **Claude Code CLI** installed ([get it here](https://docs.claude.com/en/docs/claude-code))
-2. **Node.js** (for Playwright MCP)
+| Agent | Model | Purpose |
+|-------|-------|---------|
+| **Orchestrator** | Your context | 200k context, manages todos, coordinates agents |
+| **Planner** | Opus | Architecture decisions for complex features |
+| **Design Generator** | Sonnet | Beautiful SaaS UI (dashboard, landing, pricing, billing) |
+| **Research Agent** | Sonnet | Scrapes real docs via Jina - never guesses |
+| **Convex Builder** | Sonnet | Backend + subscriptions + webhooks |
+| **AI Implementor** | Sonnet | AI features with usage limits |
+| **Stripe Builder** | Sonnet | Automatic Stripe setup via CLI |
+| **Landing Page Generator** | Sonnet | 10-15 SEO pages (spawned in parallel!) |
+| **Next.js Builder** | Sonnet | Frontend + checkout + billing |
+| **Coder** | Sonnet | Individual todo implementation |
+| **Tester** | Sonnet | Playwright visual testing + payment flows |
+| **Stuck** | Sonnet | Human escalation - no fallbacks |
 
-### Installation
+## Prerequisites
+
+### 1. Clone This Repository
 
 ```bash
-# Clone this repository
-git clone https://github.com/IncomeStreamSurfer/claude-code-agents-wizard-v2.git
-cd claude-code-agents-wizard-v2
+git clone https://github.com/IncomeStreamSurfer/claude-code-agents-wizard-v3.git
+cd claude-code-agents-wizard-v3
 
-# Start Claude Code in this directory
+# Create the Convex project INSIDE this folder
+npx create-convex@latest my-saas-app
+
+# Select:
+# - Framework: Next.js (App Router)
+# - Auth: Clerk
+
+cd my-saas-app
+
+# Copy the .claude folder from parent
+cp -r ../.claude ./
+
+# Start once to initialize Convex
+npm run dev
+# Wait for Convex dashboard, then Ctrl+C
+```
+
+### 2. Set Up Clerk Authentication
+
+1. Go to [clerk.com](https://clerk.com) and create an account
+2. Create a new application
+3. Configure providers (Google + Email recommended)
+4. Copy your keys:
+   - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
+   - `CLERK_SECRET_KEY`
+5. Go to **Configure** → **JWT Templates** → **Add new template**
+6. Name: `convex`, Type: `Convex`
+
+### 3. Set Up Stripe
+
+1. Go to [stripe.com](https://stripe.com) and create an account
+2. Get your **Secret Key** from Developers → API Keys
+   - Test mode: `sk_test_...`
+   - Live mode: `sk_live_...`
+3. Install Stripe CLI: `brew install stripe/stripe-cli/stripe` (Mac)
+
+### 4. Get Your API Keys
+
+| Service | Purpose | Get it at |
+|---------|---------|-----------|
+| **Jina AI** | Documentation research | [jina.ai](https://jina.ai) |
+| **Google AI** | AI features | [makersuite.google.com](https://makersuite.google.com) |
+| **OpenAI** | AI features | [platform.openai.com](https://platform.openai.com) |
+| **Anthropic** | AI features | [console.anthropic.com](https://console.anthropic.com) |
+
+## Usage
+
+### Required Inputs
+
+```
+1. APP DESCRIPTION:
+   - What should your app do?
+   - Which AI model to use?
+
+2. CLERK CREDENTIALS:
+   - NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_...
+   - CLERK_SECRET_KEY=sk_...
+   - JWT Issuer Domain: https://your-app.clerk.accounts.dev
+
+3. STRIPE API KEY:
+   - sk_test_... (test mode) or sk_live_... (production)
+
+4. AI PROVIDER API KEY (at least one):
+   - Google: AIzaSy...
+   - OpenAI: sk-...
+   - Anthropic: sk-ant-...
+
+5. JINA API KEY:
+   - jina_...
+
+6. PROJECT DIRECTORY:
+   - /path/to/your-convex-app
+```
+
+### Example: Complete Input
+
+```
+Build me an AI thumbnail generator where users upload images and
+get 8 variations using Google Gemini.
+
+Clerk info:
+- Domain: https://my-app.clerk.accounts.dev
+- NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_xxxxx
+- CLERK_SECRET_KEY=sk_test_xxxxx
+
+Stripe API key: sk_test_xxxxx
+
+Google AI API key: AIzaSyxxxxxxxxxxxxxxxxx
+
+Jina API key: jina_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+Project directory: /Users/me/my-thumbnail-app
+```
+
+### Start Building
+
+```bash
+cd my-saas-app
 claude
+# Paste your requirements with all credentials
 ```
 
-That's it! The agents are automatically loaded from the `.claude/` directory.
-
-## 📖 How to Use
-
-### Starting a Project
-
-When you want to build something, just tell Claude your requirements:
+## The Automated Workflow
 
 ```
-You: "Build a todo app with React and TypeScript"
+Step 0:   Collect inputs (App, Clerk, Stripe, AI keys, Jina, directory)
+Step 0.5: [Complex?] → Planner (Opus) → Architecture plan
+Step 1:   Design → Beautiful SaaS UI (dashboard, pricing, billing)
+Step 2:   Environment → All env vars including Stripe
+Step 3:   Research → Scrape real docs, verify model names
+Step 4:   Backend → Convex schema + subscriptions + webhooks
+Step 5:   AI Features → Implementation with usage limits
+Step 5.5: Stripe → Auto-create products, prices, webhooks via CLI
+Step 6:   Landing Pages → 70+ pages in parallel (6 agents)
+Step 7:   Frontend → Next.js + checkout + billing dashboard
+Step 8:   Testing → Playwright + payment flow verification
+Step 9:   GitHub → Push to repository
+Step 10:  Report → Summary + deployment instructions
 ```
 
-Claude will automatically:
-1. Create a detailed todo list using TodoWrite
-2. Delegate the first todo to the **coder** subagent
-3. The coder implements in its own clean context window
-4. Delegate verification to the **tester** subagent (Playwright screenshots)
-5. If ANY problem occurs, the **stuck** subagent asks you what to do
-6. Mark todo complete and move to the next one
-7. Repeat until project complete
+## What Gets Built
 
-### The Workflow
+### Stripe Integration (Automatic!)
 
-```
-USER: "Build X"
-    ↓
-CLAUDE: Creates detailed todos with TodoWrite
-    ↓
-CLAUDE: Invokes coder subagent for todo #1
-    ↓
-CODER (own context): Implements feature
-    ↓
-    ├─→ Problem? → Invokes STUCK → You decide → Continue
-    ↓
-CODER: Reports completion
-    ↓
-CLAUDE: Invokes tester subagent
-    ↓
-TESTER (own context): Playwright screenshots & verification
-    ↓
-    ├─→ Test fails? → Invokes STUCK → You decide → Continue
-    ↓
-TESTER: Reports success
-    ↓
-CLAUDE: Marks todo complete, moves to next
-    ↓
-Repeat until all todos done ✅
-```
+The **stripe-builder** agent automatically:
+- Creates Stripe products (Pro, Enterprise)
+- Creates prices (monthly + yearly)
+- Sets up webhook endpoint → Convex
+- Configures billing portal
+- Sets all environment variables
 
-## 🛠️ How It Works
+**Default Pricing:**
+| Tier | Monthly | Yearly | Features |
+|------|---------|--------|----------|
+| Free | $0 | $0 | 10 generations/mo |
+| Pro | $29 | $290 | 500 generations/mo |
+| Enterprise | $99 | $990 | Unlimited |
 
-### Claude (The Orchestrator)
-**Your 200k Context Window**
+### 70+ SEO Landing Pages
 
-- Creates and maintains comprehensive todo lists
-- Sees the complete project from A-Z
-- Delegates individual todos to specialized subagents
-- Tracks overall progress across all tasks
-- Maintains project state and context
+Generated in parallel by 6 agents:
+- 12 feature pages
+- 12 use case pages
+- 12 industry pages
+- 12 comparison pages ("Alternative to X")
+- 12 problem/solution pages
+- 10 pricing-focused pages
 
-**How it works**: Claude IS the orchestrator - it uses its 200k context to manage everything
-
-### Coder Subagent
-**Fresh Context Per Task**
-
-- Gets invoked with ONE specific todo item
-- Works in its own clean context window
-- Writes clean, functional code
-- **Never uses fallbacks** - invokes stuck agent immediately
-- Reports completion back to Claude
-
-**When it's used**: Claude delegates each coding todo to this subagent
-
-### Tester Subagent
-**Fresh Context Per Verification**
-
-- Gets invoked after each coder completion
-- Works in its own clean context window
-- Uses **Playwright MCP** to see rendered output
-- Takes screenshots to verify layouts
-- Tests interactions (clicks, forms, navigation)
-- **Never marks failing tests as passing**
-- Reports pass/fail back to Claude
-
-**When it's used**: Claude delegates testing after every implementation
-
-### Stuck Subagent
-**Fresh Context Per Problem**
-
-- Gets invoked when coder or tester hits a problem
-- Works in its own clean context window
-- **ONLY subagent** that can ask you questions
-- Presents clear options for you to choose
-- Blocks progress until you respond
-- Returns your decision to the calling agent
-- Ensures no blind fallbacks or workarounds
-
-**When it's used**: Whenever ANY subagent encounters ANY problem
-
-## 🚨 The "No Fallbacks" Rule
-
-**This is the key differentiator:**
-
-Traditional AI: Hits error → tries workaround → might fail silently
-**This system**: Hits error → asks you → you decide → proceeds correctly
-
-Every agent is **hardwired** to invoke the stuck agent rather than use fallbacks. You stay in control.
-
-## 💡 Example Session
+### Output Structure
 
 ```
-You: "Build a landing page with a contact form"
-
-Claude creates todos:
-  [ ] Set up HTML structure
-  [ ] Create hero section
-  [ ] Add contact form with validation
-  [ ] Style with CSS
-  [ ] Test form submission
-
-Claude invokes coder(todo #1: "Set up HTML structure")
-
-Coder (own context): Creates index.html
-Coder: Reports completion to Claude
-
-Claude invokes tester("Verify HTML structure loads")
-
-Tester (own context): Uses Playwright to navigate
-Tester: Takes screenshot
-Tester: Verifies HTML structure visible
-Tester: Reports success to Claude
-
-Claude: Marks todo #1 complete ✓
-
-Claude invokes coder(todo #2: "Create hero section")
-
-Coder (own context): Implements hero section
-Coder: ERROR - image file not found
-Coder: Invokes stuck subagent
-
-Stuck (own context): Asks YOU:
-  "Hero image 'hero.jpg' not found. How to proceed?"
-  Options:
-  - Use placeholder image
-  - Download from Unsplash
-  - Skip image for now
-
-You choose: "Download from Unsplash"
-
-Stuck: Returns your decision to coder
-Coder: Proceeds with Unsplash download
-Coder: Reports completion to Claude
-
-... and so on until all todos done
+your-saas-app/
+├── design/                     # Generated designs
+│   ├── design-system.css
+│   ├── dashboard.html
+│   ├── landing.html
+│   ├── auth.html
+│   ├── pricing.html           # NEW: Pricing page
+│   └── billing.html           # NEW: Billing dashboard
+├── landing-pages/              # 70+ page JSON files
+├── research/                   # Scraped documentation
+├── lib/stripe/                 # NEW: Stripe configuration
+│   ├── config.ts              # Product/price IDs
+│   └── plans.ts               # Plan features & limits
+├── app/
+│   ├── pricing/               # NEW: Pricing page
+│   ├── checkout/              # NEW: Success/cancel pages
+│   ├── dashboard/
+│   │   └── billing/           # NEW: Billing dashboard
+│   ├── api/stripe/            # NEW: Checkout & portal APIs
+│   └── (marketing)/           # 70+ landing pages
+├── convex/
+│   ├── schema.ts              # + subscriptions, payments tables
+│   ├── stripe.ts              # NEW: Subscription functions
+│   ├── billing.ts             # NEW: Usage tracking
+│   └── http.ts                # NEW: Stripe webhooks
+└── components/
+    ├── pricing/               # NEW: Pricing components
+    └── billing/               # NEW: Billing components
 ```
 
-## 📁 Repository Structure
+## Context Management
+
+This system is optimized to use less of your 5h and weekly limits:
+
+### Key Strategies
+
+1. **Subagent Isolation** - Agents burn tokens in their context, return only summaries
+2. **Manual /compact** - Use at 70% capacity with preservation instructions
+3. **Scratchpad Files** - Track progress in files, not conversation memory
+4. **Concise Returns** - Agents return ~500 tokens, not full output
+
+### Commands
+
+| Command | When to Use |
+|---------|-------------|
+| `/context` | Check current usage |
+| `/compact preserve [what]` | At 70% capacity |
+| `/clear` | Switching to unrelated task |
+| `/mcp` | Disable unused MCP servers |
+
+See `.claude/CONTEXT_MANAGEMENT.md` for full guide.
+
+## The "No Fallbacks" Rule
+
+Every agent is **HARDWIRED** to invoke the stuck agent when problems occur:
 
 ```
-.
-├── .claude/
-│   ├── CLAUDE.md              # Orchestration instructions for main Claude
-│   └── agents/
-│       ├── coder.md          # Coder subagent definition
-│       ├── tester.md         # Tester subagent definition
-│       └── stuck.md          # Stuck subagent definition
-├── .mcp.json                  # Playwright MCP configuration
-├── .gitignore
-└── README.md
+Traditional AI: Error → Workaround → Silent failure
+This System:    Error → Stuck agent → Ask YOU → Correct solution
 ```
 
-## 🎓 Learn More
+You're never surprised by bad decisions.
 
-### Resources
+## Environment Variables
 
-- **[SEO Grove](https://seogrove.ai)** - AI-powered SEO automation platform
-- **[ISS AI Automation School](https://www.skool.com/iss-ai-automation-school-6342/about)** - Join our community to learn AI automation
-- **[Income Stream Surfers YouTube](https://www.youtube.com/incomestreamsurfers)** - Tutorials, breakdowns, and AI automation content
+Your `.env.local` will include:
 
-### Support
+```bash
+# Convex
+CONVEX_DEPLOYMENT=your-deployment
+NEXT_PUBLIC_CONVEX_URL=https://your-project.convex.cloud
 
-Have questions or want to share what you built?
-- Join the [ISS AI Automation School community](https://www.skool.com/iss-ai-automation-school-6342/about)
-- Subscribe to [Income Stream Surfers on YouTube](https://www.youtube.com/incomestreamsurfers)
-- Check out [SEO Grove](https://seogrove.ai) for automated SEO solutions
+# Clerk
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
+CLERK_SECRET_KEY=sk_test_...
 
-## 🤝 Contributing
+# Stripe
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_PUBLISHABLE_KEY=pk_test_...
+STRIPE_WEBHOOK_SECRET=whsec_...
 
-This is an open system! Feel free to:
-- Add new specialized agents
-- Improve existing agent prompts
-- Share your agent configurations
-- Submit PRs with enhancements
+# AI (at least one)
+GOOGLE_GENERATIVE_AI_API_KEY=AIzaSy...
+OPENAI_API_KEY=sk-...
+ANTHROPIC_API_KEY=sk-ant-...
+```
 
-## 📝 How It Works Under the Hood
+**After building, set Convex env vars:**
+```bash
+npx convex env set CLERK_JWT_ISSUER_DOMAIN=https://your-app.clerk.accounts.dev
+npx convex env set STRIPE_SECRET_KEY=sk_...
+npx convex env set STRIPE_WEBHOOK_SECRET=whsec_...
+```
 
-This system leverages Claude Code's [subagent system](https://docs.claude.com/en/docs/claude-code/sub-agents):
+## Deployment
 
-1. **CLAUDE.md** instructs main Claude to be the orchestrator
-2. **Subagents** are defined in `.claude/agents/*.md` files
-3. **Each subagent** gets its own fresh context window
-4. **Main Claude** maintains the 200k context with todos and project state
-5. **Playwright MCP** is configured in `.mcp.json` for visual testing
+### Vercel (Recommended)
+```bash
+vercel deploy
+```
 
-The magic happens because:
-- **Claude (200k context)** = Maintains big picture, manages todos
-- **Coder (fresh context)** = Implements one task at a time
-- **Tester (fresh context)** = Verifies one implementation at a time
-- **Stuck (fresh context)** = Handles one problem at a time with human input
-- **Each subagent** has specific tools and hardwired escalation rules
+### Production Checklist
 
-## 🎯 Best Practices
+1. Update Stripe webhook URL in Dashboard to production URL
+2. Set production `STRIPE_WEBHOOK_SECRET` in Convex
+3. Switch Stripe to live mode keys
+4. Verify all Convex env vars are set
 
-1. **Trust Claude** - Let it create and manage the todo list
-2. **Review screenshots** - The tester provides visual proof of every implementation
-3. **Make decisions when asked** - The stuck agent needs your guidance
-4. **Don't interrupt the flow** - Let subagents complete their work
-5. **Check the todo list** - Always visible, tracks real progress
+## Files Reference
 
-## 🔥 Pro Tips
+| File | Purpose |
+|------|---------|
+| `.claude/CLAUDE.md` | Orchestrator instructions |
+| `.claude/CONTEXT_MANAGEMENT.md` | Context optimization guide |
+| `.claude/agents/*.md` | All agent configurations |
+| `.mcp.json` | MCP server configurations |
 
-- Use `/agents` command to see all available subagents
-- Claude maintains the todo list in its 200k context - check anytime
-- Screenshots from tester are saved and can be reviewed
-- Each subagent has specific tools - check their `.md` files
-- Subagents get fresh contexts - no context pollution!
+## Resources
 
-## 📜 License
+- [AI SDK Documentation](https://ai-sdk.dev/docs)
+- [Convex Documentation](https://docs.convex.dev)
+- [Clerk Documentation](https://clerk.com/docs)
+- [Stripe Documentation](https://stripe.com/docs)
+- [ISS AI Automation School](https://www.skool.com/iss-ai-automation-school-6342/about)
 
-MIT - Use it, modify it, share it!
+## Contributing
 
-## 🙏 Credits
+Improvements welcome:
+- New agent types
+- Better prompts
+- Additional providers
+- UI templates
+- Context optimizations
+
+## License
+
+MIT - Use it, modify it, profit from it!
+
+## Credits
 
 Built by [Income Stream Surfer](https://www.youtube.com/incomestreamsurfers)
 
-Powered by Claude Code's agent system and Playwright MCP.
+Powered by:
+- Claude Code's agent system
+- Jina AI for documentation research
+- Convex serverless backend
+- Clerk authentication
+- **Stripe payments**
+- Next.js App Router
 
 ---
 
-**Ready to build something amazing?** Just run `claude` in this directory and tell it what you want to create! 🚀
+**Ready to build a SaaS with payments?**
+
+```bash
+git clone https://github.com/IncomeStreamSurfer/claude-code-agents-wizard-v3.git
+cd claude-code-agents-wizard-v3
+npx create-convex@latest my-saas-app
+cd my-saas-app
+cp -r ../.claude ./
+claude
+```
+
+Then tell Claude what you want to build with your credentials!
+
+From idea to production SaaS with AI + Payments + 70 landing pages in one automated workflow!
