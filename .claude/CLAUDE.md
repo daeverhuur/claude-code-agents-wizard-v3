@@ -31,7 +31,9 @@ You are Claude Code orchestrating automated SaaS generation: Convex backend, AI 
 | Stripe setup | stripe-builder |
 | Landing pages | landing-page-generator |
 | Frontend code | nextjs-builder |
+| Clerk theming | clerk-theming |
 | Testing | tester |
+| Post-build fixes | refiner |
 | Architecture | planner |
 
 **Exception:** Git operations only (don't pollute context)
@@ -107,6 +109,7 @@ Planner provides: Architecture Decision Record, implementation order, risk asses
 - **Delegate to:** design-generator agent
 - **Input:** App name, features, AI provider, project dir
 - **Creates:** `/design/*.html` files (design-system, dashboard, landing, auth, pricing, billing, components)
+- **Design Focus:** BOLD landing pages with viewport-size heroes, distinctive fonts, animations. Dashboard design guided by dashboard-design skill for clean, minimal UI.
 - **Receives:** "Design complete. Files: /design/*.html"
 - **Context:** If >70%, run `/compact` before Step 2
 
@@ -174,8 +177,16 @@ Planner provides: Architecture Decision Record, implementation order, risk asses
   - Components: `components/*`, `components/pricing/*`, `components/billing/*`
   - Marketing: `app/(marketing)/[features|use-cases|industries|vs|solutions|pricing]/[slug]/page.tsx`
   - Sitemap: `app/sitemap.ts`
+- **Design Split:** Landing pages use bold design from design-generator. Dashboard/app uses dashboard-design skill for clean, minimal UI (shadcn-style). Separate footer styles.
 - **Receives:** "Frontend complete. Pages: [count]. Routes: /dashboard, /pricing, /billing, /[marketing]/*"
 - **Context:** If >70%, `/compact preserve file structure and Stripe integration`
+
+### Step 7.5: CLERK THEMING
+
+- **Delegate to:** clerk-theming agent
+- **Input:** Design system files, project dir
+- **Creates:** `lib/clerk/appearance.ts`, updates `app/sign-in/[[...sign-in]]/page.tsx`, `app/sign-up/[[...sign-up]]/page.tsx`
+- **Receives:** "Clerk themed. Files: lib/clerk/appearance.ts, app/sign-in/*, app/sign-up/*"
 
 ### Step 8: TESTING & VALIDATION
 
@@ -185,6 +196,15 @@ Planner provides: Architecture Decision Record, implementation order, risk asses
 - **Tests:** Auth flow, features, AI responses, Convex sync, landing pages load, CTAs work, SEO tags, pricing page, checkout flow, subscription creation, usage limits
 - **Receives:** "Tests: X passed, Y failed. Errors: [list]"
 - **Context:** Save results to test-results.md, don't keep full Playwright logs
+
+### Step 8.5: REFINEMENT
+
+- **Delegate to:** refiner agent
+- **Input:** Project dir, features list
+- **Runs:** TypeScript check, build, content scan
+- **Fixes:** Broken buttons, missing pages, placeholders, broken links, build errors
+- **Receives:** "Refinement complete. Fixed: X issues. Build: passing"
+- **CRITICAL:** This step ensures production-ready code before GitHub push
 
 ### Step 9: GITHUB DEPLOYMENT
 
@@ -218,7 +238,9 @@ Planner provides: Architecture Decision Record, implementation order, risk asses
 - **stripe-builder:** Auto Stripe setup via CLI (products, prices, webhooks) - Step 5.5
 - **landing-page-generator:** 10-15 SEO landing pages with CTAs - Step 6 (parallel)
 - **nextjs-builder:** Frontend with auth, landing pages, pricing, billing - Step 7
+- **clerk-theming:** Custom Clerk auth UI matching app design - Step 7.5
 - **tester:** Test app including payment flows - Step 8
+- **refiner:** Scans and fixes broken buttons, missing pages, placeholders - Step 8.5
 - **coder:** Implement individual todos - As needed
 - **stuck:** Human escalation, no fallbacks - When ANY problem occurs
 
@@ -240,7 +262,9 @@ Planner provides: Architecture Decision Record, implementation order, risk asses
 - Auto Stripe setup (Step 5.5)
 - Calculate landing pages, spawn agents SIMULTANEOUSLY (Step 6)
 - Pass design + Stripe config to nextjs-builder (Step 7)
+- Theme Clerk auth UI (Step 7.5)
 - Test including payment flows (Step 8)
+- Run refiner to fix issues before push (Step 8.5)
 - Push to GitHub (Step 9)
 - Report production instructions (Step 10)
 - Use /compact at 70% with preservation
@@ -280,7 +304,10 @@ Planner provides: Architecture Decision Record, implementation order, risk asses
 - Webhook endpoint configured
 - 60-70+ landing pages generated (parallel, including pricing)
 - Next.js frontend built (design + landing pages + checkout flow)
+- Clerk auth themed to match design
 - Tests passed (including payment flows)
+- Refiner ran and fixed all issues
+- Build passes with no errors
 - Code pushed to GitHub
 - User has deployment instructions (including Stripe production setup)
 

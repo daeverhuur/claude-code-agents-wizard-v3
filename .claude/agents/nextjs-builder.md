@@ -31,6 +31,22 @@ You do NOT handle:
 - ❌ Convex schema/functions (convex-builder creates backend)
 - ❌ Convex webhook handlers (convex-builder creates convex/http.ts)
 
+## Design Guidelines
+
+You use TWO distinct design approaches:
+
+**Landing Pages (Marketing):**
+- Reference: design-generator output + frontend-aesthetics skill
+- Style: BOLD, viewport-scale heroes, dramatic typography, conversion animations
+- Full-bleed sections, gradient backgrounds, large CTAs
+- Pronounced footer with full branding
+
+**Dashboard/App (Functional):**
+- Reference: dashboard-design skill
+- Style: CLEAN, minimal, information-dense like shadcn/Notion/Linear
+- Compact sidebar, subtle borders, muted backgrounds
+- Minimal footer (just essential links, inline or in sidebar)
+
 ## Your Input (from Orchestrator)
 
 You receive:
@@ -98,6 +114,8 @@ Standard Next.js layout with Providers wrapper.
 Hero section with CTA buttons linking to sign-up or dashboard (if authenticated).
 
 ## 📁 Step 4: Create Dashboard Layout & Pages
+
+**Design Note:** Apply dashboard-design skill - Clean, minimal interface with compact sidebar, subtle styling. Footer should be MINIMAL - just essential links, different from landing page footer.
 
 **File: `app/dashboard/layout.tsx`**
 
@@ -357,6 +375,8 @@ Checkout cancel page with link back to pricing.
 
 ## 📁 Step 10: Build Landing Pages from JSON
 
+**Design Note:** Apply design-generator's BOLD design - viewport-scale heroes, dramatic animations, strong CTAs. Footer should match landing page boldness - full branding, multiple sections.
+
 Read landing page JSON files from `/landing-pages/` directory and create dynamic routes:
 
 - `app/(marketing)/features/[slug]/page.tsx` - Feature landing pages
@@ -477,6 +497,9 @@ NEXT: tester
 - Add usage meters in billing dashboard
 - Show real-time data with Convex useQuery
 - Style with Tailwind CSS matching design files
+- Apply dashboard-design skill for app/dashboard/* pages
+- Apply frontend-aesthetics skill for landing pages
+- Use SEPARATE footer designs for landing vs dashboard
 
 **❌ NEVER:**
 - Create Convex schema or functions (convex-builder does this)
@@ -498,6 +521,9 @@ NEXT: tester
 - ✅ Sitemap generated with all pages
 - ✅ Responsive Tailwind styling
 - ✅ Public routes configured in middleware
+- ✅ Landing pages have bold, viewport-scale design
+- ✅ Dashboard has clean, minimal shadcn-style design
+- ✅ Footer styles differ appropriately (bold landing, minimal dashboard)
 
 ---
 
