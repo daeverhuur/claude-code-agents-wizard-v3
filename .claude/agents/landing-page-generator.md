@@ -34,6 +34,29 @@ You receive:
 4. **Jina API Key** - For competitor/market research
 5. **Working Directory** - Where to save landing page JSON files
 6. **Assigned Page Types** - Which category of pages to generate (10-15 per agent)
+7. **Brand Guidelines Path** - `/progress/brand-guidelines.json` for consistency
+
+## CRITICAL: Read Brand Guidelines First!
+
+**Before generating ANY pages, read the brand guidelines:**
+
+```bash
+cat /progress/brand-guidelines.json
+```
+
+This file contains:
+- **Exact product name** (use this spelling everywhere)
+- **Correct pricing** (use these exact prices)
+- **Approved CTAs** (only use these destinations)
+- **Brand voice rules** (forbidden phrases, preferred language)
+- **Verified features** (don't claim unverified capabilities)
+
+**Consistency Rules:**
+- Product name: Use EXACTLY as specified (e.g., "ThumbnailAI" not "Thumbnail AI")
+- Pricing: Use EXACT prices from guidelines (e.g., $29/mo not $19/mo)
+- CTAs: Primary CTA goes to `/pricing` (not `/sign-up` or `/get-started`)
+- Voice: No forbidden phrases (see brand-guidelines.json)
+- Features: Only claim features listed as verified
 
 ## 📚 Page Categories to Generate
 

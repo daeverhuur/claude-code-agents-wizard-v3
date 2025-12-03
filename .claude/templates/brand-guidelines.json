@@ -1,0 +1,125 @@
+{
+  "_description": "Brand guidelines template for landing page consistency. Orchestrator populates this after design step, before landing page generation.",
+
+  "product": {
+    "name": "{{PRODUCT_NAME}}",
+    "tagline": "{{PRODUCT_TAGLINE}}",
+    "description": "{{PRODUCT_DESCRIPTION}}",
+    "alternateNames": [],
+    "incorrectSpellings": []
+  },
+
+  "pricing": {
+    "tiers": [
+      {
+        "name": "Free",
+        "displayName": "Free",
+        "price": {
+          "monthly": 0,
+          "yearly": 0
+        },
+        "limits": "{{FREE_LIMITS}}",
+        "features": []
+      },
+      {
+        "name": "Pro",
+        "displayName": "Pro",
+        "price": {
+          "monthly": 29,
+          "yearly": 290
+        },
+        "limits": "{{PRO_LIMITS}}",
+        "features": []
+      },
+      {
+        "name": "Enterprise",
+        "displayName": "Enterprise",
+        "price": {
+          "monthly": 99,
+          "yearly": 990
+        },
+        "limits": "{{ENTERPRISE_LIMITS}}",
+        "features": []
+      }
+    ],
+    "displayFormats": {
+      "monthly": "${{price}}/month",
+      "yearly": "${{price}}/year",
+      "yearlyWithSavings": "${{price}}/year (Save 2 months)"
+    }
+  },
+
+  "ctas": {
+    "primary": {
+      "text": ["Start Free Trial", "Get Started Free"],
+      "destination": "/pricing"
+    },
+    "secondary": {
+      "text": ["Learn More", "See Features"],
+      "destination": "/features"
+    },
+    "footer": {
+      "text": ["Start Free Trial"],
+      "destination": "/pricing"
+    },
+    "forbidden": {
+      "destinations": ["/get-started", "/try-free", "/demo"],
+      "reason": "These routes don't exist"
+    }
+  },
+
+  "voice": {
+    "tone": "Professional but approachable",
+    "guidelines": [
+      "Use active voice",
+      "Be specific with numbers (Save 10 hours/week, not Save time)",
+      "Focus on benefits over features",
+      "Avoid marketing jargon (synergy, leverage, paradigm)"
+    ],
+    "forbidden": [
+      "Best in class",
+      "Revolutionary",
+      "World-leading",
+      "Game-changing",
+      "Cutting-edge"
+    ],
+    "preferredPhrases": {
+      "instead_of": {
+        "leverage": "use",
+        "utilize": "use",
+        "synergy": "work together",
+        "paradigm": "approach",
+        "disrupt": "improve"
+      }
+    }
+  },
+
+  "features": {
+    "core": [],
+    "secondary": [],
+    "comingSoon": [],
+    "forbidden": []
+  },
+
+  "compliance": {
+    "claims": {
+      "verified": [],
+      "unverified": [],
+      "forbidden": ["SOC2 compliant", "HIPAA compliant", "GDPR compliant"]
+    },
+    "notes": "Do not make compliance claims unless explicitly verified by user"
+  },
+
+  "seo": {
+    "primaryKeywords": [],
+    "secondaryKeywords": [],
+    "competitors": [],
+    "targetAudiences": []
+  },
+
+  "_usage": {
+    "createdBy": "orchestrator after Step 1",
+    "usedBy": ["landing-page-generator", "consistency-checker", "nextjs-builder"],
+    "location": "/progress/brand-guidelines.json"
+  }
+}

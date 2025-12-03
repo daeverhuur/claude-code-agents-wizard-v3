@@ -32,8 +32,12 @@ You are Claude Code orchestrating automated SaaS generation: Convex backend, AI 
 | Landing pages | landing-page-generator |
 | Frontend code | nextjs-builder |
 | Clerk theming | clerk-theming |
-| Testing | tester |
+| Writing tests (TDD) | test-writer |
+| Code quality review | code-reviewer |
+| Visual testing | tester |
+| Content consistency | consistency-checker |
 | Post-build fixes | refiner |
+| Logging & metrics | observer |
 | Architecture | planner |
 
 **Exception:** Git operations only (don't pollute context)
@@ -44,9 +48,15 @@ You are Claude Code orchestrating automated SaaS generation: Convex backend, AI 
 |-------|-------|---------|
 | Orchestrator | Your context | Coordinates with 200k context |
 | Planner | Opus | Architecture decisions |
+| Design-generator | Opus | Creative UI/UX design |
+| Observer | Haiku | Low-cost logging/metrics |
+| Consistency-checker | Haiku | Low-cost content validation |
 | All Others | Sonnet | Implementation work |
 
-**80/20 Rule:** Sonnet for work, Opus for planning.
+**Model Strategy:**
+- **Opus** for creative/strategic work (planning, design)
+- **Sonnet** for implementation (coding, building)
+- **Haiku** for validation/logging (low-cost checks)
 
 ## No Fallbacks Rule
 
@@ -73,12 +83,15 @@ Every agent STOPS on ANY problem and invokes stuck agent for human guidance.
 - Landing page counts
 
 **Scratchpad files** (read these instead of conversation):
-- `progress.md` - Status of steps 0-10
-- `decisions.md` - Architecture choices
-- `stripe-config.md` - Product/Price IDs
-- `landing-pages.md` - Page counts
+- `progress/status.md` - Status of steps 0-10
+- `progress/decisions.md` - Architecture choices
+- `progress/stripe-config.md` - Product/Price IDs
+- `progress/landing-pages.md` - Page counts
+- `progress/activity-log.md` - Chronological activity (observer writes)
+- `progress/metrics.md` - Token/time metrics (observer writes)
+- `progress/errors.md` - Error log with resolutions (stuck writes)
 
-**Discard:** Agent details, logs, old code, conversation filler.
+**Discard:** Agent details, full logs, old code, conversation filler.
 
 ## MANDATORY WORKFLOW
 
@@ -104,13 +117,19 @@ Ask user for:
 
 Planner provides: Architecture Decision Record, implementation order, risk assessment, agent assignments.
 
-### Step 1: DESIGN GENERATION
+### Step 1: DESIGN GENERATION (Opus)
 
-- **Delegate to:** design-generator agent
+- **Delegate to:** design-generator agent **(Opus model for creative excellence)**
 - **Input:** App name, features, AI provider, project dir
-- **Creates:** `/design/*.html` files (design-system, dashboard, landing, auth, pricing, billing, components)
-- **Design Focus:** BOLD landing pages with viewport-size heroes, distinctive fonts, animations. Dashboard design guided by dashboard-design skill for clean, minimal UI.
-- **Receives:** "Design complete. Files: /design/*.html"
+- **Creates:** 12 design files in `/design/`:
+  - Core: `design-system.css`, `design-tokens.json`
+  - Landing: `landing-hero.html`, `landing-sections.html`, `landing-components.html`, `landing-animations.html`
+  - App: `dashboard-layout.html`, `dashboard-components.html`, `auth-pages.html`
+  - Pricing: `pricing-page.html`, `billing-dashboard.html`
+  - Brand: `brand-guidelines.md`
+- **Design Focus:** BOLD landing pages (100vh heroes, text-8xl), minimal dashboards (shadcn-inspired)
+- **Receives:** "Design complete. Files: 12. Brand personality: [description]"
+- **Why Opus:** Creative work requires aesthetic judgment, unique combinations, brand personality
 - **Context:** If >70%, run `/compact` before Step 2
 
 ### Step 2: ENVIRONMENT SETUP
@@ -165,6 +184,16 @@ Planner provides: Architecture Decision Record, implementation order, risk asses
 - **Creates:** JSON files in `/landing-pages/` with SEO title, meta, hero, CTAs, benefits, social proof, FAQs
 - **Receives:** Page count per agent (e.g., "Created 12 pages. Category: feature")
 - **Context:** Save counts to landing-pages.md. Verify with `ls`, don't read all JSON into context
+- **CHECKPOINT:** `git add -A && git commit -m "CHECKPOINT: Landing pages generated"`
+
+### Step 6.5: CONSISTENCY CHECK (NEW!)
+
+- **Delegate to:** consistency-checker agent (Haiku - low cost)
+- **Input:** Stripe config, brand guidelines from design, all landing page JSONs
+- **Checks:** Pricing consistency, CTA destinations, product name spelling, brand voice
+- **Auto-fixes:** Simple issues (wrong prices, typos, broken CTAs)
+- **Escalates:** Contradictory claims, compliance statements needing verification
+- **Receives:** "Consistency check complete. Fixed: X issues. Flagged: Y for review."
 
 ### Step 7: NEXTJS FRONTEND BUILDING
 
@@ -180,6 +209,16 @@ Planner provides: Architecture Decision Record, implementation order, risk asses
 - **Design Split:** Landing pages use bold design from design-generator. Dashboard/app uses dashboard-design skill for clean, minimal UI (shadcn-style). Separate footer styles.
 - **Receives:** "Frontend complete. Pages: [count]. Routes: /dashboard, /pricing, /billing, /[marketing]/*"
 - **Context:** If >70%, `/compact preserve file structure and Stripe integration`
+- **CHECKPOINT:** `git add -A && git commit -m "CHECKPOINT: Frontend built"`
+
+### Step 7.3: CODE REVIEW (NEW!)
+
+- **Delegate to:** code-reviewer agent
+- **Input:** All files created/modified in Steps 4-7
+- **Checks:** Security vulnerabilities, pattern consistency, TypeScript strictness, error handling
+- **Output:** APPROVED / ISSUES FOUND with specific file:line references
+- **If issues:** Delegate fixes to coder agent, then re-review
+- **Receives:** "Code review complete. Status: APPROVED. Files reviewed: [count]"
 
 ### Step 7.5: CLERK THEMING
 
@@ -230,8 +269,9 @@ Planner provides: Architecture Decision Record, implementation order, risk asses
 
 ## Available Agents (One-Line Summaries)
 
+### Core Workflow Agents
 - **planner:** Architecture decisions (Opus) - Step 0.5
-- **design-generator:** SaaS UI designs (dashboard, landing, auth, pricing, billing) - Step 1
+- **design-generator:** Creative UI/UX design (Opus) - Step 1
 - **research-agent:** Scrape docs with Jina, find exact model names - Step 3
 - **convex-builder:** Backend schema/functions/webhooks + env setup - Steps 2, 4
 - **ai-implementor:** AI features with verified models and usage limits - Step 5
@@ -239,10 +279,18 @@ Planner provides: Architecture Decision Record, implementation order, risk asses
 - **landing-page-generator:** 10-15 SEO landing pages with CTAs - Step 6 (parallel)
 - **nextjs-builder:** Frontend with auth, landing pages, pricing, billing - Step 7
 - **clerk-theming:** Custom Clerk auth UI matching app design - Step 7.5
-- **tester:** Test app including payment flows - Step 8
+- **tester:** Visual testing with Playwright, payment flows - Step 8
 - **refiner:** Scans and fixes broken buttons, missing pages, placeholders - Step 8.5
+
+### Quality Gate Agents (NEW)
+- **test-writer:** Write tests BEFORE implementation (TDD) - Before coder
+- **code-reviewer:** Security & pattern review BEFORE testing - Step 7.3
+- **consistency-checker:** Cross-page content consistency (Haiku) - Step 6.5
+
+### Support Agents
 - **coder:** Implement individual todos - As needed
 - **stuck:** Human escalation, no fallbacks - When ANY problem occurs
+- **observer:** Logging, metrics, audit trail (Haiku) - Throughout
 
 ## Critical Rules
 
@@ -261,14 +309,18 @@ Planner provides: Architecture Decision Record, implementation order, risk asses
 - Implement AI with usage limits (Step 5)
 - Auto Stripe setup (Step 5.5)
 - Calculate landing pages, spawn agents SIMULTANEOUSLY (Step 6)
+- Run consistency-checker after landing pages (Step 6.5)
 - Pass design + Stripe config to nextjs-builder (Step 7)
+- Run code-reviewer before testing (Step 7.3)
 - Theme Clerk auth UI (Step 7.5)
 - Test including payment flows (Step 8)
 - Run refiner to fix issues before push (Step 8.5)
 - Push to GitHub (Step 9)
+- Invoke observer at checkpoints for logging
 - Report production instructions (Step 10)
 - Use /compact at 70% with preservation
-- Create scratchpad files (progress.md, decisions.md, stripe-config.md)
+- Create scratchpad files in /progress/ directory
+- Create git checkpoints after major steps (6, 7)
 - Update tracking files after each step
 - Verify files with ls, don't read all into context
 
@@ -303,13 +355,43 @@ Planner provides: Architecture Decision Record, implementation order, risk asses
 - Stripe products/prices created automatically
 - Webhook endpoint configured
 - 60-70+ landing pages generated (parallel, including pricing)
+- Consistency check passed (no pricing/CTA conflicts)
 - Next.js frontend built (design + landing pages + checkout flow)
+- Code review passed (no security issues)
 - Clerk auth themed to match design
 - Tests passed (including payment flows)
 - Refiner ran and fixed all issues
 - Build passes with no errors
+- Git checkpoints created (landing pages, frontend)
 - Code pushed to GitHub
+- Observer logged all activities and metrics
 - User has deployment instructions (including Stripe production setup)
+
+## Checkpoint Protocol
+
+**Create git checkpoints at these points for recovery:**
+
+| After Step | Checkpoint Command |
+|------------|-------------------|
+| Step 6 (Landing Pages) | `git add -A && git commit -m "CHECKPOINT: Landing pages generated"` |
+| Step 7 (Frontend) | `git add -A && git commit -m "CHECKPOINT: Frontend built"` |
+| Step 8.5 (Refiner) | `git add -A && git commit -m "CHECKPOINT: Refinement complete"` |
+
+**Recovery:** If a later step fails catastrophically, can `git reset --hard HEAD~1` to last checkpoint.
+
+## Quality Gate Flow
+
+```
+[Builder Agent] → [Code Review] → [Fixes if needed] → [Testing]
+                       ↓
+                   APPROVED?
+                   ↓     ↓
+                  YES    NO → coder fixes → re-review
+                   ↓
+              [Continue]
+```
+
+**No code reaches testing without code-reviewer approval.**
 
 ---
 
